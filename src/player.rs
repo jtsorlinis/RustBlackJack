@@ -13,7 +13,7 @@ pub struct Player<'a> {
     pub m_splitfrom: Option<&'a Player<'a>>,
     pub m_betmult: f32,
     pub m_hasnatural: bool,
-    pub m_table: &'a mut Table,
+    pub m_table: &'a mut Table<'a>,
     pub m_initialbet: i32,
     pub m_originalbet: i32,
     pub m_hand: Vec<Card>,
@@ -21,7 +21,7 @@ pub struct Player<'a> {
 }
 
 impl<'a> Player<'a> {
-    pub fn new(table: &'a mut Table, betsize: i32) -> Player<'a> {
+    pub fn new(table: &'a mut Table<'a>, betsize: i32) -> Player<'a> {
        Player {
             m_value: 0,
             m_earnings: 0.0,
@@ -68,12 +68,60 @@ impl<'a> Player<'a> {
         }
     }
 
-    pub fn win(&'a mut self, mult: f32) {
-        if self.m_splitfrom.is_some() {
-            self.m_splitfrom.unwrap().win(mult);
+    pub fn win(&mut self, mult: f32) {
+        self.m_earnings += self.m_initialbet as f32 * self.m_betmult * mult;
+        self.m_table.m_casinoearnings -= self.m_initialbet as f32 * self.m_betmult * mult;
+    }
+
+    pub fn lose(&mut self) {
+        self.m_earnings -= self.m_initialbet as f32 * self.m_betmult;
+        self.m_table.m_casinoearnings += self.m_initialbet as f32 * self.m_betmult; 
+    }
+
+    pub fn print(&self) -> String {
+        let mut output = " Player ".to_owned();
+        output += self.m_playernum;
+        output += ": ";
+        for card in self.m_hand.iter() {
+            output += card.print();
+            output += " ";
+        }
+        for i in self.m_hand.len()..5 {
+            output += "  ";
+        }
+        output += "\tScore: ";
+        output += &self.m_value.to_string();
+        if self.m_value > 21 {
+            output += " (Bust) ";
         } else {
-            self.m_earnings += self.m_initialbet as f32 * self.m_betmult * mult;
-            self.m_table.m_casinoearnings -= self.m_initialbet as f32 * self.m_betmult * mult;
+            output += "        ";
+        }
+        if self.m_playernum != "D" {
+            output += "\tBet: ";
+            output += &(self.m_initialbet as f32 * self.m_betmult).to_string();
+        }
+        return output;
+    }
+
+    pub fn evaluate(&mut self) {
+        self.m_aces = 0;
+        self.m_value = 0;
+        for card in self.m_hand.iter() {
+            self.m_value += card.m_value;
+            if card.m_isace {
+                self.m_aces+=1;
+                self.m_issoft = true;
+            }
+        }
+
+        while self.m_value > 21 && self.m_aces > 0 {
+            self.m_value -= 10;
+            self.m_aces -= 1;
+        }
+
+        if self.m_aces == 0  {
+            self.m_issoft = false;
         }
     }
+
 }
