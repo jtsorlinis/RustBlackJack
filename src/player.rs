@@ -3,25 +3,25 @@ use crate::card::Card;
 
 static MAXSPLITS: i32 = 10;
 
-pub struct Player<'a> {
+pub struct Player {
     pub m_value: i32,
     pub m_earnings: f32,
     pub m_aces: i32,
     pub m_issoft: bool,
     pub m_splitcount: i32,
     pub m_isdone: bool,
-    pub m_splitfrom: Option<&'a Player<'a>>,
+    pub m_splitfrom: bool,
     pub m_betmult: f32,
     pub m_hasnatural: bool,
-    pub m_table: &'a mut Table<'a>,
+    pub m_table: bool,
     pub m_initialbet: i32,
     pub m_originalbet: i32,
     pub m_hand: Vec<Card>,
-    pub m_playernum: &'a str
+    pub m_playernum: String
 }
 
-impl<'a> Player<'a> {
-    pub fn new(table: &'a mut Table<'a>, betsize: i32) -> Player<'a> {
+impl Player {
+    pub fn new(playernum: &str, betsize: i32) -> Player {
        Player {
             m_value: 0,
             m_earnings: 0.0,
@@ -29,26 +29,26 @@ impl<'a> Player<'a> {
             m_issoft: false,
             m_splitcount: 0,
             m_isdone: false,
-            m_splitfrom: None,
+            m_splitfrom: false,
             m_betmult: 1.0,
             m_hasnatural: false,
-            m_table: table,
+            m_table: true,
             m_initialbet: betsize,
             m_originalbet: betsize,
             m_hand: Vec::new(),
-            m_playernum: ""
+            m_playernum: playernum.to_owned()
         }
     }
 
-    fn getinitialbet(table: Table) -> i32 {
+    fn get_initial_bet(table: Table) -> i32 {
         return table.m_betsize;
     }
 
-    pub fn doubleBet(&mut self) {
+    pub fn double_bet(&mut self) {
         self.m_betmult = 2.0;
     }
 
-    pub fn resetHand(&mut self) {
+    pub fn reset_hand(&mut self) {
         self.m_hand.clear();
         self.m_value = 0;
         self.m_aces = 0;
@@ -60,7 +60,7 @@ impl<'a> Player<'a> {
         self.m_initialbet = self.m_originalbet
     }
 
-    pub fn canSplit(&self) -> &str {
+    pub fn can_split(&self) -> &str {
         if self.m_hand.len() == 2 && self.m_hand[0].m_rank == self.m_hand[1].m_rank && self.m_splitcount < MAXSPLITS {
             return self.m_hand[0].m_rank;
         } else {
@@ -70,17 +70,15 @@ impl<'a> Player<'a> {
 
     pub fn win(&mut self, mult: f32) {
         self.m_earnings += self.m_initialbet as f32 * self.m_betmult * mult;
-        self.m_table.m_casinoearnings -= self.m_initialbet as f32 * self.m_betmult * mult;
     }
 
     pub fn lose(&mut self) {
         self.m_earnings -= self.m_initialbet as f32 * self.m_betmult;
-        self.m_table.m_casinoearnings += self.m_initialbet as f32 * self.m_betmult; 
     }
 
     pub fn print(&self) -> String {
         let mut output = " Player ".to_owned();
-        output += self.m_playernum;
+        output += &self.m_playernum;
         output += ": ";
         for card in self.m_hand.iter() {
             output += card.print();

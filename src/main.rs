@@ -11,10 +11,8 @@ use player::Player;
 use table::Table;
 
 fn main() {
-    let mut table = Table {..Table::new(5,8,10,40,true)};
-
-    let mut player = Player{m_playernum: "1", ..Player::new(&mut table, 10)};
-    println!("{}", player.print());
+    let mut table1 = Table {..Table::new(5,8,10,40,true)};
+    table1.print();
     
     // let mut _c = CardPile {..CardPile::new(8)};
     // _c.shuffle();
