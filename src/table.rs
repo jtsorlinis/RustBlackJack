@@ -120,7 +120,7 @@ impl Table {
     }
   }
 
-  fn clear(&mut self) {
+  pub fn clear(&mut self) {
     for player in (0..self.m_players.len()).rev() {
       if self.m_players[player].m_splitcount > 0 {
         self.m_players.remove(player);
@@ -280,13 +280,13 @@ impl Table {
     return false;
   }
 
-  fn check_earnings(&self) {
+  pub fn check_earnings(&self) {
     let mut check = 0.0;
     for player in self.m_players.iter() {
       check += player.m_earnings;
     }
     if check * -1.0 != self.m_casinoearnings {
-      println!("Earnings dont match!");
+      println!("Earnings dont match! Player total: {}, Casino total: {}", check, self.m_casinoearnings);
       std::process::exit(1);
     }
   }
@@ -297,31 +297,31 @@ impl Table {
     }
     for player in self.m_players.iter_mut() {
       if player.m_hasnatural {
-        player.win(1.5);
+        self.m_casinoearnings += player.win(1.5);
         if self.m_verbose {
           println!("Player {} Wins {} with a natural 21", player.m_playernum, 1.5 * player.m_betmult*player.m_initialbet as f32);
         }
       }
       else if player.m_value > 21 {
-        player.lose();
+        self.m_casinoearnings += player.lose();
         if self.m_verbose {
           println!("Player {} Busts and Loses {}", player.m_playernum, player.m_betmult * player.m_initialbet as f32);
         }
       }
       else if self.m_dealer.m_value > 21 || player.m_value > self.m_dealer.m_value {
-        player.win(1.0);
+        self.m_casinoearnings += player.win(1.0);
         if self.m_verbose {
           println!("Player {} Wins {}",player.m_playernum, player.m_betmult * player.m_initialbet as f32 )
         }
       }
       else if player.m_value == self.m_dealer.m_value {
-        player.win(1.0);
+        self.m_casinoearnings += player.win(1.0);
         if self.m_verbose {
           println!("Player {} Draws", player.m_playernum)
         }
       }
       else {
-        player.lose();
+        self.m_casinoearnings += player.lose();
         if self.m_verbose {
           println!("Player {} Loses {}", player.m_playernum, player.m_betmult * player.m_initialbet as f32)
         }
@@ -333,6 +333,7 @@ impl Table {
           println!("Player {} Earnings: {}", player.m_playernum, player.m_earnings);
         }
       }
+      println!();
     }
   }
 

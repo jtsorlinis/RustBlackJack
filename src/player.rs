@@ -68,13 +68,17 @@ impl Player {
         }
     }
 
-    pub fn win(&mut self, mult: f32) {
-        self.m_earnings += self.m_initialbet as f32 * self.m_betmult * mult;
+    pub fn win(&mut self, mult: f32) -> f32 {
+        let x =  self.m_initialbet as f32 * self.m_betmult * mult;
+        self.m_earnings += x;
+        return -x;
         //TODO add earnings to original player if split
     }
 
-    pub fn lose(&mut self) {
-        self.m_earnings -= self.m_initialbet as f32 * self.m_betmult;
+    pub fn lose(&mut self) -> f32 {
+        let x = self.m_initialbet as f32 * self.m_betmult;
+        self.m_earnings -= x;
+        return x;
         //TODO add earnings to original player if split
     }
 
@@ -86,7 +90,7 @@ impl Player {
             output += card.print();
             output += " ";
         }
-        for i in self.m_hand.len()..5 {
+        for _ in self.m_hand.len()..5 {
             output += "  ";
         }
         output += "\tScore: ";

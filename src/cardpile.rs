@@ -4,6 +4,7 @@ use crate::rand;
 use std::time;
 use std::convert::TryInto;
 
+
 pub struct CardPile {
     pub m_decks: i32,
     pub m_cards: Vec<Card>,
@@ -45,8 +46,9 @@ impl CardPile {
     }
 
     pub fn refresh(&mut self) {
-        self.m_cards.clear();
-        self.m_cards.append(&mut self.m_original_cards);
+        //TODO: Implement cardpile as reference to cards for speed
+        self.m_cards = self.m_original_cards.clone();
+        self.shuffle();
     }
     
 }

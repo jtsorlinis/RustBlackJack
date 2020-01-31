@@ -38,7 +38,7 @@ impl Dealer {
             output += card.print();
             output += " ";
         }
-        for i in self.m_hand.len()..5 {
+        for _ in self.m_hand.len()..5 {
             output += "  ";
         }
         output += "\tScore: ";
