@@ -21,13 +21,13 @@ pub struct Player {
 }
 
 impl Player {
-    pub fn new(playernum: &str, betsize: i32) -> Player {
+    pub fn new(playernum: &str, betsize: i32, splitcount: i32) -> Player {
        Player {
             m_value: 0,
             m_earnings: 0.0,
             m_aces: 0,
             m_issoft: false,
-            m_splitcount: 0,
+            m_splitcount: splitcount,
             m_isdone: false,
             m_splitfrom: false,
             m_betmult: 1.0,
@@ -70,14 +70,16 @@ impl Player {
 
     pub fn win(&mut self, mult: f32) {
         self.m_earnings += self.m_initialbet as f32 * self.m_betmult * mult;
+        //TODO add earnings to original player if split
     }
 
     pub fn lose(&mut self) {
         self.m_earnings -= self.m_initialbet as f32 * self.m_betmult;
+        //TODO add earnings to original player if split
     }
 
     pub fn print(&self) -> String {
-        let mut output = " Player ".to_owned();
+        let mut output = "Player ".to_owned();
         output += &self.m_playernum;
         output += ": ";
         for card in self.m_hand.iter() {
@@ -94,10 +96,8 @@ impl Player {
         } else {
             output += "        ";
         }
-        if self.m_playernum != "D" {
-            output += "\tBet: ";
-            output += &(self.m_initialbet as f32 * self.m_betmult).to_string();
-        }
+        output += "\tBet: ";
+        output += &(self.m_initialbet as f32 * self.m_betmult).to_string();
         return output;
     }
 

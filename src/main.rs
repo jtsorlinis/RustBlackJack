@@ -12,7 +12,7 @@ use table::Table;
 
 fn main() {
     let mut table1 = Table {..Table::new(5,8,10,40,true)};
-    table1.print();
+    table1.start_round();
     
     // let mut _c = CardPile {..CardPile::new(8)};
     // _c.shuffle();

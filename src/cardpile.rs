@@ -25,7 +25,6 @@ impl CardPile {
             let mut temp = Deck::new();
             vec.append(&mut temp.m_cards);
         }
-
         return vec;
     }
 
@@ -43,6 +42,11 @@ impl CardPile {
         let now = time::SystemTime::now().duration_since(time::SystemTime::UNIX_EPOCH).expect("");
         let mut rng = rand::Rand::new(now.as_secs().try_into().unwrap());
         rng.shuffle(&mut self.m_cards);
+    }
+
+    pub fn refresh(&mut self) {
+        self.m_cards.clear();
+        self.m_cards.append(&mut self.m_original_cards);
     }
     
 }
