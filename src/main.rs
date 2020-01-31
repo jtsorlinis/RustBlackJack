@@ -11,6 +11,7 @@ use player::Player;
 use table::Table;
 
 fn main() {
+    //TODO: implement main
     let mut table1 = Table {..Table::new(5,8,10,40,true)};
     table1.start_round();
     
