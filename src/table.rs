@@ -42,6 +42,7 @@ impl Table {
   }
 
   fn deal_round(&mut self) {
+    let deal = self.deal();
     for i in 0..self.m_players.len() {
       self.deal();
       self.m_players[i].evaluate();
@@ -216,8 +217,8 @@ impl Table {
 
   fn dealer_play(&mut self) {
     let mut allbusted = false;
-    for i in 0..self.m_players.len() {
-      if self.m_players[i].m_value < 22 {
+    for player in self.m_players.iter() {
+      if player.m_value < 22 {
         allbusted = false;
       }
     }
@@ -258,9 +259,9 @@ impl Table {
   }
 
   fn check_player_natural(&mut self) {
-    for i in 0..self.m_players.len() {
-      if self.m_players[i].m_value == 21 && self.m_players[i].m_hand.len() == 2 && self.m_players[i].m_splitcount == 0 {
-        self.m_players[i].m_hasnatural = true;
+    for player in self.m_players.iter_mut() {
+      if player.m_value == 21 && player.m_hand.len() == 2 && player.m_splitcount == 0 {
+        player.m_hasnatural = true;
       }
     }
   }
@@ -281,8 +282,8 @@ impl Table {
 
   fn check_earnings(&self) {
     let mut check = 0.0;
-    for i in 0..self.m_players.len() {
-      check += self.m_players[i].m_earnings;
+    for player in self.m_players.iter() {
+      check += player.m_earnings;
     }
     if check * -1.0 != self.m_casinoearnings {
       println!("Earnings dont match!");
@@ -290,8 +291,49 @@ impl Table {
     }
   }
 
-  fn finish_round(&self) {
-    //TODO
+  fn finish_round(&mut self) {
+    if self.m_verbose {
+      println!("Scoring round");
+    }
+    for player in self.m_players.iter_mut() {
+      if player.m_hasnatural {
+        player.win(1.5);
+        if self.m_verbose {
+          println!("Player {} Wins {} with a natural 21", player.m_playernum, 1.5 * player.m_betmult*player.m_initialbet as f32);
+        }
+      }
+      else if player.m_value > 21 {
+        player.lose();
+        if self.m_verbose {
+          println!("Player {} Busts and Loses {}", player.m_playernum, player.m_betmult * player.m_initialbet as f32);
+        }
+      }
+      else if self.m_dealer.m_value > 21 || player.m_value > self.m_dealer.m_value {
+        player.win(1.0);
+        if self.m_verbose {
+          println!("Player {} Wins {}",player.m_playernum, player.m_betmult * player.m_initialbet as f32 )
+        }
+      }
+      else if player.m_value == self.m_dealer.m_value {
+        player.win(1.0);
+        if self.m_verbose {
+          println!("Player {} Draws", player.m_playernum)
+        }
+      }
+      else {
+        player.lose();
+        if self.m_verbose {
+          println!("Player {} Loses {}", player.m_playernum, player.m_betmult * player.m_initialbet as f32)
+        }
+      }
+    }
+    if self.m_verbose {
+      for player in self.m_players.iter() {
+        if player.m_splitcount == 0 {
+          println!("Player {} Earnings: {}", player.m_playernum, player.m_earnings);
+        }
+      }
+    }
   }
 
   fn print(&self) {
