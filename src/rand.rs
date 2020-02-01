@@ -22,14 +22,4 @@ impl Rand{
         self.w ^= self.w.wrapping_shr(19)^t^t.wrapping_shr(8);
         return self.w;
     }
-
-    pub fn shuffle<T>(&mut self, a: &mut [T]) {
-        if a.len()==0 {return;}
-        let mut i = a.len()-1;
-        while i>0 {
-            let j = (self.rand() as usize)%(i+1);
-            a.swap(i,j);
-            i-=1;
-        }
-    }
 }
