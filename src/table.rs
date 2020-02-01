@@ -50,7 +50,6 @@ impl Table {
   }
 
   fn deal_round(&mut self) {
-    let deal = self.deal();
     for i in 0..self.m_players.len() {
       self.deal();
       self.m_players[i].evaluate();
