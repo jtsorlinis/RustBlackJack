@@ -31,14 +31,14 @@ impl CardPile {
         return vec;
     }
 
-    pub fn print(&self) -> String {
-        self.m_cards[0].print();
-        let mut output = String::default();
-        for card in self.m_cards.iter() {
-            output += card.print();
-        }
-        return output;
-    }
+    // pub fn print(&self) -> String {
+    //     self.m_cards[0].print();
+    //     let mut output = String::default();
+    //     for card in self.m_cards.iter() {
+    //         output += card.print();
+    //     }
+    //     return output;
+    // }
 
     pub fn shuffle(&mut self) {
         //TODO: Move seed to only happen once

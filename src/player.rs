@@ -1,4 +1,3 @@
-use crate::table::Table;
 use crate::card::Card;
 
 static MAXSPLITS: i32 = 10;

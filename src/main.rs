@@ -7,8 +7,6 @@ mod table;
 mod dealer;
 mod strategies;
 
-use cardpile::CardPile;
-use player::Player;
 use table::Table;
 use std::env;
 use std::time::Instant;
