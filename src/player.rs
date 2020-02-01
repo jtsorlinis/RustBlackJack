@@ -72,14 +72,12 @@ impl Player {
         let x =  self.m_initialbet as f32 * self.m_betmult * mult;
         self.m_earnings += x;
         return -x;
-        //TODO add earnings to original player if split
     }
 
     pub fn lose(&mut self) -> f32 {
         let x = self.m_initialbet as f32 * self.m_betmult;
         self.m_earnings -= x;
         return x;
-        //TODO add earnings to original player if split
     }
 
     pub fn print(&self) -> String {
