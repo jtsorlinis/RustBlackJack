@@ -77,7 +77,6 @@ pub fn vec_to_map(vec: Vec<Vec<&str>>) -> HashMap<i32, String> {
             let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
             temp.insert(key, vec[row][col].to_owned());
         }
-        
     }
     return temp;
 }

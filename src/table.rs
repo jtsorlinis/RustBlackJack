@@ -60,7 +60,6 @@ impl Table {
   }
 
   pub fn start_round(&mut self) {
-    self.clear();
     self.update_count();
     if self.m_verbose {
       println!("{} cards left", self.m_cardpile.m_cards.len());
@@ -131,6 +130,7 @@ impl Table {
   pub fn clear(&mut self) {
     for player in (0..self.m_players.len()).rev() {
       if self.m_players[player].m_splitcount > 0 {
+        self.m_players[player-1].m_earnings += self.m_players[player].m_earnings;
         self.m_players.remove(player);
       } else {
         self.m_players[player].reset_hand();
@@ -208,19 +208,50 @@ impl Table {
   }
 
   fn autoplay(&mut self) {
-    //TODO implement strategy
     while !self.m_players[self.m_currentplayer].m_isdone {
-      if self.m_players[self.m_currentplayer].m_value < 17 {
-        self.hit();
-      } else {
+      // check if player just split
+      if self.m_players[self.m_currentplayer].m_hand.len() == 1 {
+        if self.m_verbose {
+          println!("Player {} gets 2nd card after splitting", self.m_players[self.m_currentplayer].m_playernum);
+        }
+        self.deal();
+        self.m_players[self.m_currentplayer].evaluate();
+      }
+      if self.m_players[self.m_currentplayer].m_hand.len() < 5 && self.m_players[self.m_currentplayer].m_value < 21 {
+        if self.m_players[self.m_currentplayer].can_split() == "A" {
+          self.split_aces();
+        }
+        else if self.m_players[self.m_currentplayer].can_split() != "" && (self.m_players[self.m_currentplayer].can_split() != "5" && self.m_players[self.m_currentplayer].can_split() != "10" && self.m_players[self.m_currentplayer].can_split() != "J" && self.m_players[self.m_currentplayer].can_split() != "Q" && self.m_players[self.m_currentplayer].can_split() != "K") {
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].can_split().parse().unwrap(), self.m_dealer.up_card(), &self.m_strat_split));
+        }
+        else if self.m_players[self.m_currentplayer].m_issoft {
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &self.m_strat_soft));
+        }
+        else {
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &self.m_strat_hard));
+        }
+      }
+      else {
         self.stand();
       }
     }
     self.next_player();
   }
 
-  fn action(&self, action: String) {
-    //TODO
+  fn action(&mut self, action: String) {
+    if action == "H" {
+      self.hit();
+    } else if action == "S" {
+      self.stand();
+    } else if action == "D" {
+      self.double_bet();
+    } else if action == "P" {
+      self.split();
+    }
+    else {
+      println!("No Action found");
+      std::process::exit(1);
+    }
   }
 
   fn dealer_play(&mut self) {
@@ -343,6 +374,7 @@ impl Table {
       }
       println!();
     }
+    self.clear();
   }
 
   fn print(&self) {

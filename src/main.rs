@@ -15,15 +15,14 @@ use std::time::Instant;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    std::process::exit(1);
 
     const NUM_PLAYERS: i32 = 5;
     const NUM_DECKS: i32 = 8;
     const BET_SIZE:i32 = 10;
     const MIN_CARDS:usize = 40;
 
-    let mut rounds:i32 = 1000;
-    const VERBOSE:bool = true;
+    let mut rounds:i32 = 100000;
+    const VERBOSE:bool = false;
 
     if args.len() == 2 {
         rounds = args[1].parse::<i32>().unwrap();
@@ -39,7 +38,7 @@ fn main() {
             println!("Round {}", x);
         }
         if !VERBOSE && rounds > 1000 && x % (rounds/100) == 0 {
-            println!("Progress: {}%", (x/rounds)*100);
+            println!("Progress: {}%", (x as f32/rounds as f32)*100.0);
         }
 
         table1.start_round();
