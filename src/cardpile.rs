@@ -41,7 +41,6 @@ impl CardPile {
     // }
 
     pub fn shuffle(&mut self) {
-        //TODO: Move seed to only happen once
         for i in (0..self.m_cards.len()).rev() {
             let j = (self.m_rand.rand() % (i+1) as u32) as usize;
             self.m_cards.swap(i, j);
