@@ -40,10 +40,6 @@ impl Player {
         }
     }
 
-    fn get_initial_bet(table: Table) -> i32 {
-        return table.m_betsize;
-    }
-
     pub fn double_bet(&mut self) {
         self.m_betmult = 2.0;
     }

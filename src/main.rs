@@ -33,7 +33,7 @@ fn main() {
 
     let start = Instant::now();
 
-    for x in 0..rounds {
+    for x in 1..rounds+1 {
         if VERBOSE {
             println!("Round {}", x);
         }

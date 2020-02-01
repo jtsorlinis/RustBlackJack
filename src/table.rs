@@ -62,7 +62,7 @@ impl Table {
     self.update_count();
     if self.m_verbose {
       println!("{} cards left", self.m_cardpile.m_cards.len());
-      println!("Running count is: {}\tTrue count is: {}", self.m_runningcount, self.m_truecount);
+      println!("Running count is: {}\tTrue count is: {}", self.m_runningcount, self.m_truecount as i32);
     }
     self.get_new_cards();
     self.predeal();
@@ -99,7 +99,7 @@ impl Table {
   }
 
   fn select_bet(&mut self) {
-    if self.m_truecount >= 2.0 {
+    if self.m_truecount as i32 >= 2 {
       self.m_players[self.m_currentplayer].m_initialbet = ((self.m_betsize as i32 * (self.m_truecount-1.0) as i32) as f32 * 1.25) as i32;
     }
   }
@@ -110,7 +110,6 @@ impl Table {
     if !facedown {
       self.m_runningcount += tempcard.m_count;
     }
-    self.m_runningcount += tempcard.m_count;
     self.m_dealer.m_hand.push(tempcard);
   }
 
