@@ -48,7 +48,7 @@ fn main() {
     table1.clear();
     print!("\r");
     for player in table1.m_players.iter() {
-        println!("Player {} earnings: {}\t\tWin Percentage: {}%", player.m_playernum, player.m_earnings, 50.0 + (player.m_earnings/(rounds as f32 * BET_SIZE as f32) * 50.0));
+        println!("Player {} earnings: {}\t\tWin Percentage: {}%", player.m_playernum, player.m_earnings as i32, 50.0 + (player.m_earnings/(rounds as f32 * BET_SIZE as f32) * 50.0));
     }
     println!("Casino earnings: {}", table1.m_casinoearnings);
     println!("Played {} rounds in {} seconds", rounds, start.elapsed().as_millis() as f32/1000.0);

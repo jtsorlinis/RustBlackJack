@@ -352,7 +352,6 @@ impl Table {
         }
       }
       else if player.m_value == self.m_dealer.m_value {
-        self.m_casinoearnings += player.win(1.0);
         if self.m_verbose {
           println!("Player {} Draws", player.m_playernum)
         }
