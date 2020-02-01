@@ -1,6 +1,8 @@
 use crate::cardpile::CardPile;
 use crate::dealer::Dealer;
 use crate::player::Player;
+use crate::strategies;
+use std::collections::HashMap;
 
 pub struct Table {
   pub m_verbose: bool,
@@ -13,7 +15,10 @@ pub struct Table {
   pub m_currentplayer: usize,
   pub m_casinoearnings: f32,
   pub m_runningcount: i32,
-  pub m_truecount: f32
+  pub m_truecount: f32,
+  pub m_strat_hard: HashMap<i32, String>,
+  pub m_strat_soft: HashMap<i32, String>,
+  pub m_strat_split: HashMap<i32, String>
 }
 
 impl Table {
@@ -29,7 +34,10 @@ impl Table {
       m_currentplayer: 0,
       m_casinoearnings: 0.0,
       m_runningcount: 0,
-      m_truecount: 0.0
+      m_truecount: 0.0,
+      m_strat_hard: strategies::vec_to_map(strategies::get_strat("hard")),
+      m_strat_soft: strategies::vec_to_map(strategies::get_strat("soft")),
+      m_strat_split: strategies::vec_to_map(strategies::get_strat("split"))
     }
   }
 

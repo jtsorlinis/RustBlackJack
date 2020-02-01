@@ -5,6 +5,7 @@ mod cardpile;
 mod player;
 mod table;
 mod dealer;
+mod strategies;
 
 use cardpile::CardPile;
 use player::Player;
@@ -14,7 +15,7 @@ use std::time::Instant;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    
+    std::process::exit(1);
 
     const NUM_PLAYERS: i32 = 5;
     const NUM_DECKS: i32 = 8;
