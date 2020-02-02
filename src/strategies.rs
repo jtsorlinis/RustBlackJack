@@ -1,8 +1,7 @@
 use std::collections::HashMap;
 
-pub fn get_strat(strat: &str) -> Vec<Vec<&'static str>> {
-
-    let strat_hard =  vec![
+lazy_static! {
+    pub static ref strat_hard: Vec<Vec<&'static str>> =  vec![
         vec!["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
         vec!["2", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
         vec!["3", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H" ],
@@ -26,7 +25,7 @@ pub fn get_strat(strat: &str) -> Vec<Vec<&'static str>> {
         vec!["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" ]
     ];
 
-    let strat_soft =  vec![
+    pub static ref strat_soft: Vec<Vec<&'static str>> =  vec![
         vec!["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
         vec!["13", "H", "H", "H", "D", "D", "H", "H", "H", "H", "H" ],
         vec!["14", "H", "H", "H", "D", "D", "H", "H", "H", "H", "H" ],
@@ -39,7 +38,7 @@ pub fn get_strat(strat: &str) -> Vec<Vec<&'static str>> {
         vec!["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" ]
     ];
 
-    let strat_split =  vec![
+    pub static ref strat_split: Vec<Vec<&'static str>> =  vec![
         vec!["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
         vec!["2", "P", "P", "P", "P", "P", "P", "H", "H", "H", "H" ],
         vec!["3", "P", "P", "P", "P", "P", "P", "H", "H", "H", "H" ],
@@ -51,21 +50,14 @@ pub fn get_strat(strat: &str) -> Vec<Vec<&'static str>> {
         vec!["11", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P" ]
     ];
 
-    if strat == "hard" {
-        return strat_hard;
-    } else if strat == "soft" {
-        return strat_soft;
-    } else if strat == "split" {
-        return strat_split;
-    } else {
-        println!("No strategy mentioned");
-        std::process::exit(1);
-    }
+    pub static ref map_hard: HashMap<i32, String> = vec_to_map(strat_hard.to_owned());
+    pub static ref map_soft: HashMap<i32, String> = vec_to_map(strat_soft.to_owned());
+    pub static ref map_split: HashMap<i32, String> = vec_to_map(strat_split.to_owned());
 }
 
-pub fn get_action(player_val: i32, dealer_val: i32, strategy: &HashMap<i32, String>) -> String {
+pub fn get_action(player_val: i32, dealer_val: i32, strategy: &HashMap<i32, String>) -> &str {
     let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
-    return strategy[&key].clone();
+    return &strategy[&key];
 }
 
 pub fn vec_to_map(vec: Vec<Vec<&str>>) -> HashMap<i32, String> {

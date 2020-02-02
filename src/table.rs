@@ -2,7 +2,6 @@ use crate::cardpile::CardPile;
 use crate::dealer::Dealer;
 use crate::player::Player;
 use crate::strategies;
-use std::collections::HashMap;
 
 pub struct Table {
   pub m_verbose: bool,
@@ -15,10 +14,7 @@ pub struct Table {
   pub m_currentplayer: usize,
   pub m_casinoearnings: f32,
   pub m_runningcount: i32,
-  pub m_truecount: f32,
-  pub m_strat_hard: HashMap<i32, String>,
-  pub m_strat_soft: HashMap<i32, String>,
-  pub m_strat_split: HashMap<i32, String>
+  pub m_truecount: f32
 }
 
 impl Table {
@@ -34,10 +30,7 @@ impl Table {
       m_currentplayer: 0,
       m_casinoearnings: 0.0,
       m_runningcount: 0,
-      m_truecount: 0.0,
-      m_strat_hard: strategies::vec_to_map(strategies::get_strat("hard")),
-      m_strat_soft: strategies::vec_to_map(strategies::get_strat("soft")),
-      m_strat_split: strategies::vec_to_map(strategies::get_strat("split"))
+      m_truecount: 0.0
     }
   }
 
@@ -219,13 +212,13 @@ impl Table {
           self.split_aces();
         }
         else if self.m_players[self.m_currentplayer].can_split() != "" && (self.m_players[self.m_currentplayer].can_split() != "5" && self.m_players[self.m_currentplayer].can_split() != "10" && self.m_players[self.m_currentplayer].can_split() != "J" && self.m_players[self.m_currentplayer].can_split() != "Q" && self.m_players[self.m_currentplayer].can_split() != "K") {
-          self.action(strategies::get_action(self.m_players[self.m_currentplayer].can_split().parse().unwrap(), self.m_dealer.up_card(), &self.m_strat_split));
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].can_split().parse().unwrap(), self.m_dealer.up_card(), &strategies::map_split));
         }
         else if self.m_players[self.m_currentplayer].m_issoft {
-          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &self.m_strat_soft));
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &strategies::map_soft));
         }
         else {
-          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &self.m_strat_hard));
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &strategies::map_hard));
         }
       }
       else {
@@ -235,7 +228,7 @@ impl Table {
     self.next_player();
   }
 
-  fn action(&mut self, action: String) {
+  fn action(&mut self, action: &str) {
     if action == "H" {
       self.hit();
     } else if action == "S" {

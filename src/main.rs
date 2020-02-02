@@ -7,6 +7,9 @@ mod table;
 mod dealer;
 mod strategies;
 
+#[macro_use]
+extern crate lazy_static;
+
 use table::Table;
 use std::env;
 use std::time::Instant;
