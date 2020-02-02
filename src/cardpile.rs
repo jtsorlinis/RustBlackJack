@@ -51,7 +51,6 @@ impl CardPile {
     pub fn refresh(&mut self) {
         //TODO: Implement cardpile as reference to cards for speed
         self.m_cards = self.m_original_cards.clone();
-        self.shuffle();
     }
     
 }
