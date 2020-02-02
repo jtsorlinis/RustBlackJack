@@ -1,11 +1,13 @@
 use crate::card::Card;
+use std::rc::Rc;
 
 pub struct Dealer {
     pub m_value: i32,
     pub m_aces: i32,
     pub m_issoft: bool,
-    pub m_hand: Vec<Card>,
-    pub m_playernum: String
+    pub m_hand: Vec<Rc<Card>>,
+    pub m_playernum: String,
+    pub m_hide: bool
 }
 
 impl Dealer {
@@ -15,7 +17,8 @@ impl Dealer {
             m_aces: 0,
             m_issoft: false,
             m_hand: Vec::new(),
-            m_playernum: "D".to_owned()
+            m_playernum: "D".to_owned(),
+            m_hide: true
         }
     }
 
@@ -28,14 +31,20 @@ impl Dealer {
         self.m_value = 0;
         self.m_aces = 0;
         self.m_issoft = false;
+        self.m_hide = true;
     }
 
     pub fn print(&self) -> String {
         let mut output = "Player ".to_owned();
         output += &self.m_playernum;
         output += ": ";
-        for card in self.m_hand.iter() {
-            output += card.print();
+        for card in 0..self.m_hand.len() {
+            if card == 1 && self.m_hide {
+                output += "X";
+            } else {
+                output += self.m_hand[card].print();
+            }
+            
             output += " ";
         }
         for _ in self.m_hand.len()..5 {

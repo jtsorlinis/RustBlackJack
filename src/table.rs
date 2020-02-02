@@ -105,8 +105,7 @@ impl Table {
   }
 
   fn deal_dealer(&mut self, facedown: bool) {
-    let mut tempcard = self.m_cardpile.m_cards.pop().unwrap();
-    tempcard.m_facedown = facedown;
+    let tempcard = self.m_cardpile.m_cards.pop().unwrap();
     if !facedown {
       self.m_runningcount += tempcard.m_count;
     }
@@ -259,7 +258,7 @@ impl Table {
         allbusted = false;
       }
     }
-    self.m_dealer.m_hand[1].m_facedown = false;
+    self.m_dealer.m_hide = false;
     self.m_runningcount += self.m_dealer.m_hand[1].m_count;
     self.m_dealer.evaluate();
     if self.m_verbose {
@@ -306,7 +305,7 @@ impl Table {
   fn check_dealer_natural(&mut self) -> bool {
     self.m_dealer.evaluate();
     if self.m_dealer.m_value == 21 {
-      self.m_dealer.m_hand[1].m_facedown = false;
+      self.m_dealer.m_hide = false;
       self.m_runningcount += self.m_dealer.m_hand[1].m_count;
       if self.m_verbose {
         self.print();

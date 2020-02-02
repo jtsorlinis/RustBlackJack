@@ -1,4 +1,5 @@
 use crate::card::Card;
+use std::rc::Rc;
 
 static MAXSPLITS: i32 = 10;
 
@@ -15,7 +16,7 @@ pub struct Player {
     pub m_table: bool,
     pub m_initialbet: i32,
     pub m_originalbet: i32,
-    pub m_hand: Vec<Card>,
+    pub m_hand: Vec<Rc<Card>>,
     pub m_playernum: String
 }
 

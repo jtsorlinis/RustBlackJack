@@ -1,3 +1,4 @@
+use std::rc::Rc;
 use crate::card::Card;
 use crate::deck::Deck;
 use crate::rand;
@@ -7,8 +8,8 @@ use std::convert::TryInto;
 
 pub struct CardPile {
     pub m_decks: i32,
-    pub m_cards: Vec<Card>,
-    pub m_original_cards: Vec<Card>,
+    pub m_cards: Vec<Rc<Card>>,
+    pub m_original_cards: Vec<Rc<Card>>,
     pub m_rand: rand::Rand
 }
 
@@ -22,8 +23,8 @@ impl CardPile {
         }
     }
 
-    fn generate_cardpile(decks: i32) -> Vec<Card> {
-        let mut vec: Vec<Card> = Vec::new();
+    fn generate_cardpile(decks: i32) -> Vec<Rc<Card>> {
+        let mut vec: Vec<Rc<Card>> = Vec::new();
         for _ in 0..decks {
             let mut temp = Deck::new();
             vec.append(&mut temp.m_cards);
