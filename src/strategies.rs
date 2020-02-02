@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 lazy_static! {
-    pub static ref strat_hard: Vec<Vec<&'static str>> =  vec![
+    pub static ref STRAT_HARD: Vec<Vec<&'static str>> =  vec![
         vec!["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
         vec!["2", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H"],
         vec!["3", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H" ],
@@ -25,7 +25,7 @@ lazy_static! {
         vec!["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" ]
     ];
 
-    pub static ref strat_soft: Vec<Vec<&'static str>> =  vec![
+    pub static ref STRAT_SOFT: Vec<Vec<&'static str>> =  vec![
         vec!["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
         vec!["13", "H", "H", "H", "D", "D", "H", "H", "H", "H", "H" ],
         vec!["14", "H", "H", "H", "D", "D", "H", "H", "H", "H", "H" ],
@@ -38,7 +38,7 @@ lazy_static! {
         vec!["21", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S" ]
     ];
 
-    pub static ref strat_split: Vec<Vec<&'static str>> =  vec![
+    pub static ref STRAT_SPLIT: Vec<Vec<&'static str>> =  vec![
         vec!["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
         vec!["2", "P", "P", "P", "P", "P", "P", "H", "H", "H", "H" ],
         vec!["3", "P", "P", "P", "P", "P", "P", "H", "H", "H", "H" ],
@@ -50,9 +50,9 @@ lazy_static! {
         vec!["11", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P" ]
     ];
 
-    pub static ref map_hard: HashMap<i32, String> = vec_to_map(strat_hard.to_owned());
-    pub static ref map_soft: HashMap<i32, String> = vec_to_map(strat_soft.to_owned());
-    pub static ref map_split: HashMap<i32, String> = vec_to_map(strat_split.to_owned());
+    pub static ref MAP_HARD: HashMap<i32, String> = vec_to_map(STRAT_HARD.to_owned());
+    pub static ref MAP_SOFT: HashMap<i32, String> = vec_to_map(STRAT_SOFT.to_owned());
+    pub static ref MAP_SPLIT: HashMap<i32, String> = vec_to_map(STRAT_SPLIT.to_owned());
 }
 
 pub fn get_action(player_val: i32, dealer_val: i32, strategy: &HashMap<i32, String>) -> &str {

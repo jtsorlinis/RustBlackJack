@@ -212,13 +212,13 @@ impl Table {
           self.split_aces();
         }
         else if self.m_players[self.m_currentplayer].can_split() != "" && (self.m_players[self.m_currentplayer].can_split() != "5" && self.m_players[self.m_currentplayer].can_split() != "10" && self.m_players[self.m_currentplayer].can_split() != "J" && self.m_players[self.m_currentplayer].can_split() != "Q" && self.m_players[self.m_currentplayer].can_split() != "K") {
-          self.action(strategies::get_action(self.m_players[self.m_currentplayer].can_split().parse().unwrap(), self.m_dealer.up_card(), &strategies::map_split));
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].can_split().parse().unwrap(), self.m_dealer.up_card(), &strategies::MAP_SPLIT));
         }
         else if self.m_players[self.m_currentplayer].m_issoft {
-          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &strategies::map_soft));
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &strategies::MAP_SOFT));
         }
         else {
-          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &strategies::map_hard));
+          self.action(strategies::get_action(self.m_players[self.m_currentplayer].m_value, self.m_dealer.up_card(), &strategies::MAP_HARD));
         }
       }
       else {
