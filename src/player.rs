@@ -56,11 +56,11 @@ impl Player {
         self.m_initialbet = self.m_originalbet
     }
 
-    pub fn can_split(&self) -> &str {
+    pub fn can_split(&self) -> i32 {
         if self.m_hand.len() == 2 && self.m_hand[0].m_rank == self.m_hand[1].m_rank && self.m_splitcount < MAXSPLITS {
-            return self.m_hand[0].m_rank;
+            return self.m_hand[0].m_value;
         } else {
-            return "";
+            return 0;
         }
     }
 

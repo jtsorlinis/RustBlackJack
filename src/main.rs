@@ -22,7 +22,7 @@ fn main() {
     const BET_SIZE:i32 = 10;
     const MIN_CARDS:usize = 40;
 
-    let mut rounds:i32 = 100000;
+    let mut rounds:i32 = 1000000;
     const VERBOSE:bool = false;
 
     if args.len() == 2 {
