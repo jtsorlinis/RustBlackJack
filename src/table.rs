@@ -252,6 +252,7 @@ impl Table {
     for player in self.m_players.iter() {
       if player.m_value < 22 {
         allbusted = false;
+        break;
       }
     }
     self.m_dealer.m_hide = false;
