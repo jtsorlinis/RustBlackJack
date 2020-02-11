@@ -14,7 +14,7 @@ pub struct Table {
   pub m_currentplayer: usize,
   pub m_casinoearnings: f32,
   pub m_runningcount: i32,
-  pub m_truecount: f32
+  pub m_truecount: i32
 }
 
 impl Table {
@@ -30,7 +30,7 @@ impl Table {
       m_currentplayer: 0,
       m_casinoearnings: 0.0,
       m_runningcount: 0,
-      m_truecount: 0.0
+      m_truecount: 0
     }
   }
 
@@ -55,7 +55,7 @@ impl Table {
     self.update_count();
     if self.m_verbose {
       println!("{} cards left", self.m_cardpile.m_cards.len());
-      println!("Running count is: {}\tTrue count is: {}", self.m_runningcount, self.m_truecount as i32);
+      println!("Running count is: {}\tTrue count is: {}", self.m_runningcount, self.m_truecount);
     }
     self.get_new_cards();
     self.predeal();
@@ -93,7 +93,7 @@ impl Table {
 
   fn select_bet(&mut self) {
     if self.m_truecount as i32 >= 2 {
-      self.m_players[self.m_currentplayer].m_initialbet = ((self.m_betsize as i32 * (self.m_truecount-1.0) as i32) as f32 * 1.25) as i32;
+      self.m_players[self.m_currentplayer].m_initialbet = ((self.m_betsize * (self.m_truecount-1)) as f32 * 1.25) as i32;
     }
   }
 
@@ -109,7 +109,7 @@ impl Table {
     if self.m_cardpile.m_cards.len() < self.m_mincards {
       self.m_cardpile.refresh();
       self.m_cardpile.shuffle();
-      self.m_truecount = 0.0;
+      self.m_truecount = 0;
       self.m_runningcount = 0;
       if self.m_verbose {
         println!("Got {} new decks as number of cards left is below {}", self.m_numofdecks, self.m_mincards)
@@ -131,7 +131,9 @@ impl Table {
   }
 
   fn update_count(&mut self) {
-    self.m_truecount = self.m_runningcount as f32 / (self.m_cardpile.m_cards.len() as f32 /52.0);
+    if self.m_cardpile.m_cards.len() > 51 {
+      self.m_truecount = self.m_runningcount / (self.m_cardpile.m_cards.len() as i32 / 52);
+    }
   }
 
   fn hit(&mut self) {
