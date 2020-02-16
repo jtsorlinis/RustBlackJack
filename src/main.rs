@@ -13,6 +13,8 @@ extern crate lazy_static;
 use table::Table;
 use std::env;
 use std::time::Instant;
+use std::io;
+use std::io::Write;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -39,7 +41,8 @@ fn main() {
             println!("Round {}", x);
         }
         if !VERBOSE && rounds > 1000 && x % (rounds/100) == 0 {
-            eprint!("\rProgress: {:.0}%", (x as f32/rounds as f32)*100.0);
+            print!("\rProgress: {:.0}%", (x as f32/rounds as f32)*100.0);
+            io::stdout().flush().unwrap();
         }
 
         table1.start_round();
