@@ -41,7 +41,7 @@ fn main() {
             println!("Round {}", x);
         }
         if !VERBOSE && rounds > 1000 && x % (rounds/100) == 0 {
-            print!("\rProgress: {:.0}%", (x as f32/rounds as f32)*100.0);
+            print!("\rProgress: {:.0}%", x * 100 / rounds);
             io::stdout().flush().unwrap();
         }
 
