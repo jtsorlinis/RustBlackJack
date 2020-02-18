@@ -43,12 +43,17 @@ impl Table {
   }
 
   fn deal_round(&mut self) {
-    for i in 0..self.m_players.len() {
+    for _ in 0..self.m_players.len() {
       self.deal();
-      self.m_players[i].evaluate();
       self.m_currentplayer += 1;
     }
     self.m_currentplayer = 0;
+  }
+
+  fn evaluate_all(&mut self) {
+    for i in 0..self.m_players.len() {
+      self.m_players[i].evaluate();
+    }
   }
 
   pub fn start_round(&mut self) {
@@ -63,6 +68,7 @@ impl Table {
     self.deal_dealer(false);
     self.deal_round();
     self.deal_dealer(true);
+    self.evaluate_all();
     self.m_currentplayer = 0;
     if self.check_dealer_natural() {
       self.finish_round();
