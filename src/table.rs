@@ -162,7 +162,7 @@ impl Table {
   fn split(&mut self) {
     let splitplayernum = (self.m_players[self.m_currentplayer].m_playernum).to_string() + "S";
     let mut splitplayer = Player::new(&splitplayernum, self.m_betsize, self.m_players[self.m_currentplayer].m_splitcount+1);
-    splitplayer.m_hand.push(self.m_players[self.m_currentplayer].m_hand.remove(1));
+    splitplayer.m_hand.push(self.m_players[self.m_currentplayer].m_hand.pop().unwrap());
     self.m_players.insert(self.m_currentplayer+1, splitplayer);
     self.m_players[self.m_currentplayer].evaluate();
     self.m_players[self.m_currentplayer+1].evaluate();
@@ -177,7 +177,7 @@ impl Table {
     }
     let splitplayernum = (self.m_players[self.m_currentplayer].m_playernum).to_string() + "S";
     let mut splitplayer = Player::new(&splitplayernum, self.m_betsize, self.m_players[self.m_currentplayer].m_splitcount+1);
-    splitplayer.m_hand.push(self.m_players[self.m_currentplayer].m_hand.remove(1));
+    splitplayer.m_hand.push(self.m_players[self.m_currentplayer].m_hand.pop().unwrap());
     self.m_players.insert(self.m_currentplayer+1, splitplayer);
     self.deal();
     self.m_players[self.m_currentplayer].evaluate();
