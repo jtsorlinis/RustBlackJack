@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use fnv::FnvHashMap;
 
 lazy_static! {
     pub static ref STRAT_HARD: Vec<Vec<&'static str>> =  vec![
@@ -50,24 +50,24 @@ lazy_static! {
         vec!["11", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P" ]
     ];
 
-    pub static ref MAP_HARD: HashMap<i32, String> = vec_to_map(STRAT_HARD.to_owned());
-    pub static ref MAP_SOFT: HashMap<i32, String> = vec_to_map(STRAT_SOFT.to_owned());
-    pub static ref MAP_SPLIT: HashMap<i32, String> = vec_to_map(STRAT_SPLIT.to_owned());
+    pub static ref MAP_HARD: FnvHashMap<i32, &'static str> = vec_to_map(&STRAT_HARD);
+    pub static ref MAP_SOFT: FnvHashMap<i32, &'static str> = vec_to_map(&STRAT_SOFT);
+    pub static ref MAP_SPLIT: FnvHashMap<i32, &'static str> = vec_to_map(&STRAT_SPLIT);
 }
 
-pub fn get_action(player_val: i32, dealer_val: i32, strategy: &HashMap<i32, String>) -> &str {
+pub fn get_action(player_val: i32, dealer_val: i32, strategy: &FnvHashMap<i32, &'static str>) -> &'static str {
     let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
-    return &strategy[&key];
+    return &strategy.get(&key).as_ref().unwrap();
 }
 
-pub fn vec_to_map(vec: Vec<Vec<&str>>) -> HashMap<i32, String> {
-    let mut temp = HashMap::new();
+pub fn vec_to_map(vec: &Vec<Vec<&'static str>>) -> FnvHashMap<i32, &'static str> {
+    let mut temp = FnvHashMap::default();
     for row in 0..vec.len() {
         for col in 0..vec[0].len() {
             let player_val = vec[row][0].parse::<i32>().unwrap();
             let dealer_val = vec[0][col].parse::<i32>().unwrap();
             let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
-            temp.insert(key, vec[row][col].to_owned());
+            temp.insert(key, vec[row][col]);
         }
     }
     return temp;
