@@ -1,5 +1,3 @@
-use fnv::FnvHashMap;
-
 lazy_static! {
     pub static ref STRAT_HARD: Vec<Vec<&'static str>> =  vec![
         vec!["0", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" ],
@@ -50,24 +48,24 @@ lazy_static! {
         vec!["11", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P" ]
     ];
 
-    pub static ref MAP_HARD: FnvHashMap<i32, &'static str> = vec_to_map(&STRAT_HARD);
-    pub static ref MAP_SOFT: FnvHashMap<i32, &'static str> = vec_to_map(&STRAT_SOFT);
-    pub static ref MAP_SPLIT: FnvHashMap<i32, &'static str> = vec_to_map(&STRAT_SPLIT);
+    pub static ref MAP_HARD: Vec<&'static str> = vec_to_map(&STRAT_HARD);
+    pub static ref MAP_SOFT: Vec<&'static str> = vec_to_map(&STRAT_SOFT);
+    pub static ref MAP_SPLIT: Vec<&'static str> = vec_to_map(&STRAT_SPLIT);
 }
 
-pub fn get_action(player_val: i32, dealer_val: i32, strategy: &FnvHashMap<i32, &'static str>) -> &'static str {
+pub fn get_action(player_val: i32, dealer_val: i32, strategy: &Vec<&'static str>) -> &'static str {
     let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
-    return &strategy.get(&key).as_ref().unwrap();
+    return &strategy[key as usize]
 }
 
-pub fn vec_to_map(vec: &Vec<Vec<&'static str>>) -> FnvHashMap<i32, &'static str> {
-    let mut temp = FnvHashMap::default();
+pub fn vec_to_map(vec: &Vec<Vec<&'static str>>) -> Vec<&'static str> {
+    let mut temp = vec!["";1000];
     for row in 0..vec.len() {
         for col in 0..vec[0].len() {
             let player_val = vec[row][0].parse::<i32>().unwrap();
             let dealer_val = vec[0][col].parse::<i32>().unwrap();
             let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
-            temp.insert(key, vec[row][col]);
+            temp[key as usize] = vec[row][col];
         }
     }
     return temp;
