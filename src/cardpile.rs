@@ -1,16 +1,14 @@
 use std::rc::Rc;
 use crate::card::Card;
 use crate::deck::Deck;
-use crate::rand;
 use std::time;
 use std::convert::TryInto;
-
 
 pub struct CardPile {
     pub m_decks: i32,
     pub m_cards: Vec<Rc<Card>>,
     pub m_original_cards: Vec<Rc<Card>>,
-    pub m_rand: rand::Rand
+    pub seed: u32
 }
 
 impl CardPile {
@@ -19,8 +17,15 @@ impl CardPile {
             m_decks: decks,
             m_cards: CardPile::generate_cardpile(decks),
             m_original_cards: CardPile::generate_cardpile(decks),
-            m_rand: rand::Rand::new(time::SystemTime::now().duration_since(time::SystemTime::UNIX_EPOCH).expect("").as_secs().try_into().unwrap())
+            seed: time::SystemTime::now().duration_since(time::SystemTime::UNIX_EPOCH).expect("").as_secs().try_into().unwrap()
         }
+    }
+
+    fn xorshift(&mut self) -> u32 {
+        self.seed ^= self.seed << 13;
+	    self.seed ^= self.seed >> 17;
+	    self.seed ^= self.seed << 5;
+	    return self.seed
     }
 
     fn generate_cardpile(decks: i32) -> Vec<Rc<Card>> {
@@ -43,7 +48,7 @@ impl CardPile {
 
     pub fn shuffle(&mut self) {
         for i in (0..self.m_cards.len()).rev() {
-            let j = (self.m_rand.rand() % (i+1) as u32) as usize;
+            let j = (self.xorshift() % (i+1) as u32) as usize;
             self.m_cards.swap(i, j);
         }
     }

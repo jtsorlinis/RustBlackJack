@@ -1,6 +1,5 @@
 mod deck;
 mod card;
-mod rand;
 mod cardpile;
 mod player;
 mod table;
