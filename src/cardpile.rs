@@ -13,10 +13,11 @@ pub struct CardPile {
 
 impl CardPile {
     pub fn new(decks: i32) -> CardPile {
+        let c = CardPile::generate_cardpile(decks);
         CardPile {
             m_decks: decks,
-            m_cards: CardPile::generate_cardpile(decks),
-            m_original_cards: CardPile::generate_cardpile(decks),
+            m_cards: c.clone(),
+            m_original_cards: c,
             seed: time::SystemTime::now().duration_since(time::SystemTime::UNIX_EPOCH).expect("").as_secs().try_into().unwrap()
         }
     }
