@@ -1,4 +1,3 @@
-#[derive(Clone)]
 pub struct Card {
     pub m_rank: &'static str,
     pub m_suit: &'static str,
