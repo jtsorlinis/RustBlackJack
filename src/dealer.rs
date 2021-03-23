@@ -68,9 +68,9 @@ impl Dealer {
         unsafe {
             self.m_aces = 0;
             self.m_value = 0;
-            for i in 0..self.m_hand.len() {
-                self.m_value += (&*self.m_hand[i]).m_value;
-                if (&*self.m_hand[i]).m_isace {
+            for &card in self.m_hand.iter() {
+                self.m_value += (*card).m_value;
+                if (*card).m_isace {
                     self.m_aces+=1;
                     self.m_issoft = true;
                 }

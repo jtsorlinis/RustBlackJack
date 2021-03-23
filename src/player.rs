@@ -83,8 +83,8 @@ impl Player {
             let mut output = "Player ".to_owned();
             output += &self.m_playernum;
             output += ": ";
-            for i in 0..self.m_hand.len() {
-                output += (&*self.m_hand[i]).print();
+            for &card in self.m_hand.iter() {
+                output += (*card).print();
                 output += " ";
             }
             for _ in self.m_hand.len()..5 {
@@ -108,9 +108,9 @@ impl Player {
         unsafe {
             self.m_aces = 0;
             self.m_value = 0;
-            for i in 0..self.m_hand.len() {
-                self.m_value += (&*self.m_hand[i]).m_value;
-                if (&*self.m_hand[i]).m_isace {
+            for &card in self.m_hand.iter() {
+                self.m_value += (*card).m_value;
+                if (*card).m_isace {
                     self.m_aces+=1;
                     self.m_issoft = true;
                 }
