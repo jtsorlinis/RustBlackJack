@@ -1,12 +1,11 @@
 use crate::card::Card;
-use std::rc::Rc;
 // use crate::rand;
 
 static RANKS: [&str; 13] = ["A", "2", "3", "4", "5", "6", "7", "8","9","10","J","Q","K"];
 static SUITS: [&str; 4] = ["Clubs", "Hearts", "Spades", "Diamonds"];
 
 pub struct Deck {
-    pub m_cards: Vec<Rc<Card>>
+    pub m_cards: Vec<Card>
 }
 
 impl Deck {
@@ -16,11 +15,11 @@ impl Deck {
         }
     }
 
-    fn generate_deck() -> Vec<Rc<Card>> {
-        let mut vec: Vec<Rc<Card>> = Vec::new();
+    fn generate_deck() -> Vec<Card> {
+        let mut vec: Vec<Card> = Vec::new();
         for suit in SUITS.iter() {
             for rank in RANKS.iter() {
-                let card = Rc::new(Card::new(rank, suit));
+                let card = Card::new(rank, suit);
                 vec.push(card);
             }
         }

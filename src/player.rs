@@ -1,5 +1,4 @@
 use crate::card::Card;
-use std::rc::Rc;
 
 static MAXSPLITS: i32 = 10;
 
@@ -16,7 +15,7 @@ pub struct Player {
     pub m_table: bool,
     pub m_initialbet: i32,
     pub m_originalbet: i32,
-    pub m_hand: Vec<Rc<Card>>,
+    pub m_hand: Vec<*mut Card>,
     pub m_playernum: String
 }
 
@@ -57,11 +56,14 @@ impl Player {
     }
 
     pub fn can_split(&self) -> i32 {
-        if self.m_hand.len() == 2 && self.m_hand[0].m_rank == self.m_hand[1].m_rank && self.m_splitcount < MAXSPLITS {
-            return self.m_hand[0].m_value;
-        } else {
-            return 0;
+        unsafe {
+            if self.m_hand.len() == 2 && (&*self.m_hand[0]).m_rank == (&*self.m_hand[1]).m_rank && self.m_splitcount < MAXSPLITS {
+                return (&*self.m_hand[0]).m_value;
+            } else {
+                return 0;
+            }
         }
+        
     }
 
     pub fn win(&mut self, mult: f32) -> f32 {
@@ -77,46 +79,51 @@ impl Player {
     }
 
     pub fn print(&self) -> String {
-        let mut output = "Player ".to_owned();
-        output += &self.m_playernum;
-        output += ": ";
-        for card in self.m_hand.iter() {
-            output += card.print();
-            output += " ";
+        unsafe {
+            let mut output = "Player ".to_owned();
+            output += &self.m_playernum;
+            output += ": ";
+            for i in 0..self.m_hand.len() {
+                output += (&*self.m_hand[i]).print();
+                output += " ";
+            }
+            for _ in self.m_hand.len()..5 {
+                output += "  ";
+            }
+            output += "\tScore: ";
+            output += &self.m_value.to_string();
+            if self.m_value > 21 {
+                output += " (Bust) ";
+            } else {
+                output += "        ";
+            }
+            output += "\tBet: ";
+            output += &(self.m_initialbet as f32 * self.m_betmult).to_string();
+            return output;
         }
-        for _ in self.m_hand.len()..5 {
-            output += "  ";
-        }
-        output += "\tScore: ";
-        output += &self.m_value.to_string();
-        if self.m_value > 21 {
-            output += " (Bust) ";
-        } else {
-            output += "        ";
-        }
-        output += "\tBet: ";
-        output += &(self.m_initialbet as f32 * self.m_betmult).to_string();
-        return output;
+        
     }
 
     pub fn evaluate(&mut self) {
-        self.m_aces = 0;
-        self.m_value = 0;
-        for card in self.m_hand.iter() {
-            self.m_value += card.m_value;
-            if card.m_isace {
-                self.m_aces+=1;
-                self.m_issoft = true;
+        unsafe {
+            self.m_aces = 0;
+            self.m_value = 0;
+            for i in 0..self.m_hand.len() {
+                self.m_value += (&*self.m_hand[i]).m_value;
+                if (&*self.m_hand[i]).m_isace {
+                    self.m_aces+=1;
+                    self.m_issoft = true;
+                }
             }
-        }
-
-        while self.m_value > 21 && self.m_aces > 0 {
-            self.m_value -= 10;
-            self.m_aces -= 1;
-        }
-
-        if self.m_aces == 0  {
-            self.m_issoft = false;
+    
+            while self.m_value > 21 && self.m_aces > 0 {
+                self.m_value -= 10;
+                self.m_aces -= 1;
+            }
+    
+            if self.m_aces == 0  {
+                self.m_issoft = false;
+            }
         }
     }
 

@@ -83,9 +83,11 @@ impl Table {
   }
 
   fn deal(&mut self) {
-    let tempcard = self.m_cardpile.m_cards.pop().unwrap();
-    self.m_runningcount += tempcard.m_count;
-    self.m_players[self.m_currentplayer].m_hand.push(tempcard);
+    unsafe {
+      let tempcard = &mut *self.m_cardpile.m_cards.pop().unwrap();
+      self.m_runningcount += tempcard.m_count;
+      self.m_players[self.m_currentplayer].m_hand.push(tempcard);
+    }
   }
 
   fn predeal(&mut self) {
@@ -104,11 +106,14 @@ impl Table {
   }
 
   fn deal_dealer(&mut self, facedown: bool) {
-    let tempcard = self.m_cardpile.m_cards.pop().unwrap();
+    unsafe {
+      let tempcard = &mut *self.m_cardpile.m_cards.pop().unwrap();
     if !facedown {
       self.m_runningcount += tempcard.m_count;
     }
     self.m_dealer.m_hand.push(tempcard);
+    }
+    
   }
 
   fn get_new_cards(&mut self) {
@@ -262,7 +267,9 @@ impl Table {
       }
     }
     self.m_dealer.m_hide = false;
-    self.m_runningcount += self.m_dealer.m_hand[1].m_count;
+    unsafe {
+      self.m_runningcount += (&*self.m_dealer.m_hand[1]).m_count;
+    }
     self.m_dealer.evaluate();
     if self.m_verbose {
       println!("Dealer's turn");
@@ -309,7 +316,9 @@ impl Table {
     self.m_dealer.evaluate();
     if self.m_dealer.m_value == 21 {
       self.m_dealer.m_hide = false;
-      self.m_runningcount += self.m_dealer.m_hand[1].m_count;
+      unsafe {
+        self.m_runningcount += (&*self.m_dealer.m_hand[1]).m_count;
+      }
       if self.m_verbose {
         self.print();
         println!("Dealer has a natural 21");
