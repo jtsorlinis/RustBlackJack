@@ -15,6 +15,9 @@ use std::time::Instant;
 use std::io;
 use std::io::Write;
 
+#[global_allocator]
+static ALLOC: rpmalloc::RpMalloc = rpmalloc::RpMalloc;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
