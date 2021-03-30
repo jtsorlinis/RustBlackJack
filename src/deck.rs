@@ -5,7 +5,7 @@ static RANKS: [&str; 13] = ["A", "2", "3", "4", "5", "6", "7", "8","9","10","J",
 static SUITS: [&str; 4] = ["Clubs", "Hearts", "Spades", "Diamonds"];
 
 pub struct Deck {
-    pub m_cards: Vec<Card>
+    pub m_cards: Vec<*mut Card>
 }
 
 impl Deck {
@@ -15,11 +15,11 @@ impl Deck {
         }
     }
 
-    fn generate_deck() -> Vec<Card> {
-        let mut vec: Vec<Card> = Vec::new();
+    fn generate_deck() -> Vec<*mut Card> {
+        let mut vec: Vec<*mut Card> = Vec::new();
         for suit in SUITS.iter() {
             for rank in RANKS.iter() {
-                let card = Card::new(rank, suit);
+                let card = Box::into_raw(Box::new(Card::new(rank, suit))) ;
                 vec.push(card);
             }
         }
