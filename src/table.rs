@@ -242,19 +242,16 @@ impl Table {
     self.next_player();
   }
 
-  fn action(&mut self, action: &str) {
-    if action == "H" {
-      self.hit();
-    } else if action == "S" {
-      self.stand();
-    } else if action == "D" {
-      self.double_bet();
-    } else if action == "P" {
-      self.split();
-    }
-    else {
-      println!("No Action found");
-      std::process::exit(1);
+  fn action(&mut self, action: char) {
+    match action {
+      'H' => self.hit(),
+      'S' => self.stand(),
+      'D' => self.double_bet(),
+      'P' => self.split(),
+      _ => {
+        println!("No Action found");
+        std::process::exit(1);
+      }
     }
   }
 

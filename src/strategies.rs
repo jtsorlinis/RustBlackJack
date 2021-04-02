@@ -48,24 +48,24 @@ lazy_static! {
         vec!["11", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P" ]
     ];
 
-    pub static ref MAP_HARD: Vec<&'static str> = vec_to_map(&STRAT_HARD);
-    pub static ref MAP_SOFT: Vec<&'static str> = vec_to_map(&STRAT_SOFT);
-    pub static ref MAP_SPLIT: Vec<&'static str> = vec_to_map(&STRAT_SPLIT);
+    pub static ref MAP_HARD: Vec<char> = vec_to_map(&STRAT_HARD);
+    pub static ref MAP_SOFT: Vec<char> = vec_to_map(&STRAT_SOFT);
+    pub static ref MAP_SPLIT: Vec<char> = vec_to_map(&STRAT_SPLIT);
 }
 
-pub fn get_action(player_val: i32, dealer_val: i32, strategy: &Vec<&'static str>) -> &'static str {
+pub fn get_action(player_val: i32, dealer_val: i32, strategy: &Vec<char>) -> char {
     let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
-    return &strategy[key as usize]
+    return strategy[key as usize]
 }
 
-pub fn vec_to_map(vec: &Vec<Vec<&'static str>>) -> Vec<&'static str> {
-    let mut temp = vec!["";1000];
+pub fn vec_to_map(vec: &Vec<Vec<&'static str>>) -> Vec<char> {
+    let mut temp = vec![' ';1000];
     for row in 0..vec.len() {
         for col in 0..vec[0].len() {
             let player_val = vec[row][0].parse::<i32>().unwrap();
             let dealer_val = vec[0][col].parse::<i32>().unwrap();
             let key = ((player_val + dealer_val) * (player_val + dealer_val + 1)) / 2 + dealer_val;
-            temp[key as usize] = vec[row][col];
+            temp[key as usize] = vec[row][col].chars().next().unwrap();
         }
     }
     return temp;
