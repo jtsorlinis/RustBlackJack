@@ -35,7 +35,7 @@ impl Table {
   }
 
   fn fill(numplayers: i32, betsize: i32) -> Vec<Player> {
-    let mut temp: Vec<Player> = Vec::new();
+    let mut temp: Vec<Player> = Vec::with_capacity((numplayers * 3) as usize);
     for i in 0..numplayers {
       temp.push(Player::new(&(i + 1).to_string(), betsize, 0));
     }
