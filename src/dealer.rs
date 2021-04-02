@@ -15,7 +15,7 @@ impl Dealer {
             m_value: 0,
             m_aces: 0,
             m_issoft: false,
-            m_hand: Vec::new(),
+            m_hand: Vec::with_capacity(5),
             m_playernum: "D".to_owned(),
             m_hide: true
         }

@@ -32,7 +32,7 @@ impl Player {
             m_table: true,
             m_initialbet: betsize,
             m_originalbet: betsize,
-            m_hand: Vec::new(),
+            m_hand: Vec::with_capacity(5),
             m_playernum: playernum.to_owned()
         }
     }
