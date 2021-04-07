@@ -75,7 +75,7 @@ impl CardPile {
 
     pub fn shuffle(&mut self) {
         for i in (0..self.m_cards.len()).rev() {
-            let j = self.pcg_32_range(i as u32) as usize;
+            let j = self.pcg_32_range((i + 1) as u32) as usize;
             self.m_cards.swap(i, j);
         }
     }
