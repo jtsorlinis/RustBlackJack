@@ -1,13 +1,13 @@
 use crate::card::Card;
 use crate::deck::Deck;
-use std::time;
 use std::convert::TryInto;
+use std::time;
 
 pub struct CardPile {
     pub m_decks: i32,
     pub m_cards: Vec<*mut Card>,
     pub m_original_cards: Vec<*mut Card>,
-    pub seed: u32
+    pub state: u64,
 }
 
 impl CardPile {
@@ -17,19 +17,42 @@ impl CardPile {
             m_decks: decks,
             m_original_cards: c.clone(),
             m_cards: c,
-            seed: time::SystemTime::now().duration_since(time::SystemTime::UNIX_EPOCH).expect("").as_secs().try_into().unwrap()
+            state: time::SystemTime::now()
+                .duration_since(time::SystemTime::UNIX_EPOCH)
+                .expect("")
+                .as_secs()
+                .try_into()
+                .unwrap(),
         };
-        
+
         cp.refresh();
 
         return cp;
     }
 
-    fn xorshift(&mut self) -> u32 {
-        self.seed ^= self.seed << 13;
-	    self.seed ^= self.seed >> 17;
-	    self.seed ^= self.seed << 5;
-	    return self.seed
+    // From https://www.pcg-random.org/download.html#minimal-c-implementation
+    fn pcg_32(&mut self) -> u32 {
+        let oldstate: u64 = self.state;
+        self.state = oldstate.wrapping_mul(6364136223846793005).wrapping_add(1);
+        let xorshifted: u32 = (((oldstate >> 18) ^ oldstate) >> 27) as u32;
+        let rot: u32 = (oldstate >> 59) as u32;
+        return xorshifted >> rot | (xorshifted << (rot.wrapping_neg() & 31));
+    }
+
+    // use nearly divisionless technique found here https://github.com/lemire/FastShuffleExperiments
+    fn pcg_32_range(&mut self, s: u32) -> u32 {
+        let mut x = self.pcg_32();
+        let mut m = x as u64 * s as u64;
+        let mut l = m as u32;
+        if l < s {
+            let t = s.wrapping_neg() % s;
+            while l < t {
+                x = self.pcg_32();
+                m = x as u64 * s as u64;
+                l = m as u32;
+            }
+        }
+        return (m >> 32) as u32;
     }
 
     fn generate_cardpile(decks: i32) -> Vec<*mut Card> {
@@ -52,7 +75,7 @@ impl CardPile {
 
     pub fn shuffle(&mut self) {
         for i in (0..self.m_cards.len()).rev() {
-            let j = (self.xorshift() % (i+1) as u32) as usize;
+            let j = self.pcg_32_range(i as u32) as usize;
             self.m_cards.swap(i, j);
         }
     }
@@ -60,6 +83,4 @@ impl CardPile {
     pub fn refresh(&mut self) {
         self.m_cards = self.m_original_cards.clone();
     }
-    
 }
-
