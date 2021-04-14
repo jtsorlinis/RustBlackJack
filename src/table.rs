@@ -166,7 +166,7 @@ impl Table {
 
   fn split(&mut self) {
     let splitplayernum = (self.m_players[self.m_currentplayer].m_playernum).to_string() + "S";
-    let mut splitplayer = Player::new(&splitplayernum, self.m_betsize, self.m_players[self.m_currentplayer].m_splitcount+1);
+    let mut splitplayer = Player::new(&splitplayernum, self.m_players[self.m_currentplayer].m_initialbet, self.m_players[self.m_currentplayer].m_splitcount+1);
     splitplayer.m_hand.push(self.m_players[self.m_currentplayer].m_hand.pop().unwrap());
     self.m_players.insert(self.m_currentplayer+1, splitplayer);
     self.m_players[self.m_currentplayer].evaluate();
@@ -181,7 +181,7 @@ impl Table {
       println!("Player {} splits aces", self.m_players[self.m_currentplayer].m_playernum);
     }
     let splitplayernum = (self.m_players[self.m_currentplayer].m_playernum).to_string() + "S";
-    let mut splitplayer = Player::new(&splitplayernum, self.m_betsize, self.m_players[self.m_currentplayer].m_splitcount+1);
+    let mut splitplayer = Player::new(&splitplayernum, self.m_players[self.m_currentplayer].m_initialbet, self.m_players[self.m_currentplayer].m_splitcount+1);
     splitplayer.m_hand.push(self.m_players[self.m_currentplayer].m_hand.pop().unwrap());
     self.m_players.insert(self.m_currentplayer+1, splitplayer);
     self.deal();
@@ -256,7 +256,7 @@ impl Table {
   }
 
   fn dealer_play(&mut self) {
-    let mut allbusted = false;
+    let mut allbusted = true;
     for player in self.m_players.iter() {
       if player.m_value < 22 {
         allbusted = false;

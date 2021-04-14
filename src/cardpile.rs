@@ -18,11 +18,11 @@ impl CardPile {
             m_original_cards: c.clone(),
             m_cards: c,
             state: time::SystemTime::now()
-                .duration_since(time::SystemTime::UNIX_EPOCH)
-                .expect("")
-                .as_secs()
-                .try_into()
-                .unwrap(),
+            .duration_since(time::SystemTime::UNIX_EPOCH)
+            .expect("")
+            .as_secs()
+            .try_into()
+            .unwrap(),
         };
 
         cp.refresh();
@@ -74,7 +74,7 @@ impl CardPile {
     // }
 
     pub fn shuffle(&mut self) {
-        for i in (0..self.m_cards.len()).rev() {
+        for i in (1..self.m_cards.len()).rev() {
             let j = self.pcg_32_range((i + 1) as u32) as usize;
             self.m_cards.swap(i, j);
         }
