@@ -4,7 +4,7 @@ pub struct Card {
     pub m_facedown: bool,
     pub m_count: i32,
     pub m_value: i32,
-    pub m_isace: bool
+    pub m_isace: bool,
 }
 
 impl Card {
@@ -15,7 +15,7 @@ impl Card {
             m_facedown: false,
             m_count: Card::count(rank),
             m_value: Card::evaluate(rank),
-            m_isace: Card::isace(rank)
+            m_isace: Card::isace(rank),
         }
     }
 
@@ -28,7 +28,7 @@ impl Card {
     }
 
     fn isace(rank: &str) -> bool {
-        return rank == "A"
+        return rank == "A";
     }
 
     fn evaluate(rank: &str) -> i32 {
@@ -44,11 +44,9 @@ impl Card {
     fn count(rank: &str) -> i32 {
         if rank == "10" || rank == "J" || rank == "Q" || rank == "K" || rank == "A" {
             return -1;
-        }
-        else if rank == "7" || rank == "8" || rank == "9" {
+        } else if rank == "7" || rank == "8" || rank == "9" {
             return 0;
-        }
-        else {
+        } else {
             return 1;
         }
     }

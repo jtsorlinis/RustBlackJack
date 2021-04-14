@@ -15,12 +15,12 @@ pub struct Player {
     pub m_initialbet: i32,
     pub m_originalbet: i32,
     pub m_hand: Vec<*mut Card>,
-    pub m_playernum: String
+    pub m_playernum: String,
 }
 
 impl Player {
     pub fn new(playernum: &str, betsize: i32, splitcount: i32) -> Player {
-       Player {
+        Player {
             m_value: 0,
             m_earnings: 0.0,
             m_aces: 0,
@@ -33,7 +33,7 @@ impl Player {
             m_initialbet: betsize,
             m_originalbet: betsize,
             m_hand: Vec::with_capacity(5),
-            m_playernum: playernum.to_owned()
+            m_playernum: playernum.to_owned(),
         }
     }
 
@@ -55,17 +55,19 @@ impl Player {
 
     pub fn can_split(&self) -> i32 {
         unsafe {
-            if self.m_hand.len() == 2 && (&*self.m_hand[0]).m_rank == (&*self.m_hand[1]).m_rank && self.m_splitcount < MAXSPLITS {
+            if self.m_hand.len() == 2
+                && (&*self.m_hand[0]).m_rank == (&*self.m_hand[1]).m_rank
+                && self.m_splitcount < MAXSPLITS
+            {
                 return (&*self.m_hand[0]).m_value;
             } else {
                 return 0;
             }
         }
-        
     }
 
     pub fn win(&mut self, mult: f32) -> f32 {
-        let x =  self.m_initialbet as f32 * self.m_betmult * mult;
+        let x = self.m_initialbet as f32 * self.m_betmult * mult;
         self.m_earnings += x;
         return -x;
     }
@@ -99,7 +101,6 @@ impl Player {
             output += &(self.m_initialbet as f32 * self.m_betmult).to_string();
             return output;
         }
-        
     }
 
     pub fn evaluate(&mut self) {
@@ -109,20 +110,19 @@ impl Player {
             for &card in self.m_hand.iter() {
                 self.m_value += (*card).m_value;
                 if (*card).m_isace {
-                    self.m_aces+=1;
+                    self.m_aces += 1;
                     self.m_issoft = true;
                 }
             }
-    
+
             while self.m_value > 21 && self.m_aces > 0 {
                 self.m_value -= 10;
                 self.m_aces -= 1;
             }
-    
-            if self.m_aces == 0  {
+
+            if self.m_aces == 0 {
                 self.m_issoft = false;
             }
         }
     }
-
 }

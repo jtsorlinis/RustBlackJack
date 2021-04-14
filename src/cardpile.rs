@@ -18,11 +18,11 @@ impl CardPile {
             m_original_cards: c.clone(),
             m_cards: c,
             state: time::SystemTime::now()
-            .duration_since(time::SystemTime::UNIX_EPOCH)
-            .expect("")
-            .as_secs()
-            .try_into()
-            .unwrap(),
+                .duration_since(time::SystemTime::UNIX_EPOCH)
+                .expect("")
+                .as_secs()
+                .try_into()
+                .unwrap(),
         };
 
         cp.refresh();

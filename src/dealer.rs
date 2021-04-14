@@ -6,7 +6,7 @@ pub struct Dealer {
     pub m_issoft: bool,
     pub m_hand: Vec<*mut Card>,
     pub m_playernum: String,
-    pub m_hide: bool
+    pub m_hide: bool,
 }
 
 impl Dealer {
@@ -17,7 +17,7 @@ impl Dealer {
             m_issoft: false,
             m_hand: Vec::with_capacity(5),
             m_playernum: "D".to_owned(),
-            m_hide: true
+            m_hide: true,
         }
     }
 
@@ -46,7 +46,7 @@ impl Dealer {
                 } else {
                     output += (&*self.m_hand[card]).print();
                 }
-                
+
                 output += " ";
             }
             for _ in self.m_hand.len()..5 {
@@ -61,7 +61,6 @@ impl Dealer {
             }
             return output;
         }
-        
     }
 
     pub fn evaluate(&mut self) {
@@ -71,20 +70,19 @@ impl Dealer {
             for &card in self.m_hand.iter() {
                 self.m_value += (*card).m_value;
                 if (*card).m_isace {
-                    self.m_aces+=1;
+                    self.m_aces += 1;
                     self.m_issoft = true;
                 }
             }
-    
+
             while self.m_value > 21 && self.m_aces > 0 {
                 self.m_value -= 10;
                 self.m_aces -= 1;
             }
-    
-            if self.m_aces == 0  {
+
+            if self.m_aces == 0 {
                 self.m_issoft = false;
             }
         }
-        
     }
 }
