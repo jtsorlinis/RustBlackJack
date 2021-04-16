@@ -33,7 +33,7 @@ impl CardPile {
         self.state = oldstate.wrapping_mul(6364136223846793005).wrapping_add(1);
         let xorshifted: u32 = (((oldstate >> 18) ^ oldstate) >> 27) as u32;
         let rot: u32 = (oldstate >> 59) as u32;
-        return xorshifted >> rot | (xorshifted << (rot.wrapping_neg() & 31));
+        return xorshifted.rotate_right(rot);
     }
 
     // use nearly divisionless technique found here https://github.com/lemire/FastShuffleExperiments
