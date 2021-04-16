@@ -1,6 +1,5 @@
 use crate::card::Card;
 use crate::deck::Deck;
-use std::convert::TryInto;
 use std::time;
 
 pub struct CardPile {
@@ -19,10 +18,8 @@ impl CardPile {
             m_cards: c,
             state: time::SystemTime::now()
                 .duration_since(time::SystemTime::UNIX_EPOCH)
-                .expect("")
-                .as_secs()
-                .try_into()
-                .unwrap(),
+                .unwrap()
+                .as_secs(),
         };
 
         cp.refresh();
