@@ -92,8 +92,8 @@ impl Table {
 
     fn deal(&mut self) {
         unsafe {
-            let tempcard = &mut *self.m_cardpile.m_cards.pop().unwrap();
-            self.m_runningcount += tempcard.m_count;
+            let tempcard = self.m_cardpile.m_cards.pop().unwrap();
+            self.m_runningcount += (*tempcard).m_count;
             self.m_players[self.m_currentplayer].m_hand.push(tempcard);
         }
     }
@@ -116,9 +116,9 @@ impl Table {
 
     fn deal_dealer(&mut self, facedown: bool) {
         unsafe {
-            let tempcard = &mut *self.m_cardpile.m_cards.pop().unwrap();
+            let tempcard = self.m_cardpile.m_cards.pop().unwrap();
             if !facedown {
-                self.m_runningcount += tempcard.m_count;
+                self.m_runningcount += (*tempcard).m_count;
             }
             self.m_dealer.m_hand.push(tempcard);
         }
@@ -317,7 +317,7 @@ impl Table {
         }
         self.m_dealer.m_hide = false;
         unsafe {
-            self.m_runningcount += (&*self.m_dealer.m_hand[1]).m_count;
+            self.m_runningcount += (*self.m_dealer.m_hand[1]).m_count;
         }
         self.m_dealer.evaluate();
         if self.m_verbose {
@@ -364,7 +364,7 @@ impl Table {
         if self.m_dealer.m_value == 21 {
             self.m_dealer.m_hide = false;
             unsafe {
-                self.m_runningcount += (&*self.m_dealer.m_hand[1]).m_count;
+                self.m_runningcount += (*self.m_dealer.m_hand[1]).m_count;
             }
             if self.m_verbose {
                 self.print();

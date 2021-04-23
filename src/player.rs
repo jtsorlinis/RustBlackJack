@@ -56,10 +56,10 @@ impl Player {
     pub fn can_split(&self) -> i32 {
         unsafe {
             if self.m_hand.len() == 2
-                && (&*self.m_hand[0]).m_rank == (&*self.m_hand[1]).m_rank
+                && (*self.m_hand[0]).m_rank == (*self.m_hand[1]).m_rank
                 && self.m_splitcount < MAXSPLITS
             {
-                return (&*self.m_hand[0]).m_value;
+                return (*self.m_hand[0]).m_value;
             } else {
                 return 0;
             }

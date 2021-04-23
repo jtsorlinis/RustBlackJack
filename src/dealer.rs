@@ -23,7 +23,7 @@ impl Dealer {
 
     pub fn up_card(&self) -> i32 {
         unsafe {
-            return (&*self.m_hand[0]).m_value;
+            return (*self.m_hand[0]).m_value;
         }
     }
 
@@ -44,7 +44,7 @@ impl Dealer {
                 if card == 1 && self.m_hide {
                     output += "X";
                 } else {
-                    output += (&*self.m_hand[card]).print();
+                    output += (*self.m_hand[card]).print();
                 }
 
                 output += " ";
