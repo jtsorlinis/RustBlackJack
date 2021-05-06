@@ -33,9 +33,7 @@ fn main() {
         rounds = args[1].parse::<i32>().unwrap();
     }
 
-    let mut table1 = Table {
-        ..Table::new(NUM_PLAYERS, NUM_DECKS, BET_SIZE, MIN_CARDS, VERBOSE)
-    };
+    let mut table1 = Table::new(NUM_PLAYERS, NUM_DECKS, BET_SIZE, MIN_CARDS, VERBOSE);
     table1.m_cardpile.shuffle();
 
     let start = Instant::now();
