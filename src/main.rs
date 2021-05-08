@@ -10,8 +10,6 @@ mod table;
 extern crate lazy_static;
 
 use std::env;
-use std::io;
-use std::io::Write;
 use std::time::Instant;
 use table::Table;
 
@@ -43,8 +41,7 @@ fn main() {
             println!("Round {}", x);
         }
         if !VERBOSE && rounds > 1000 && x % (rounds / 100) == 0 {
-            print!("\rProgress: {:.0}%", x * 100 / rounds);
-            io::stdout().flush().unwrap();
+            eprint!("\rProgress: {:.0}%", x * 100 / rounds);
         }
 
         table1.start_round();
